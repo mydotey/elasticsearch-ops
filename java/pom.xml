@@ -5,7 +5,7 @@
 
     <groupId>org.mydotey.tool</groupId>
     <artifactId>elasticsearch-ops</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>elasticsearch-ops</name>
     <description>elasticsearch ops lib</description>

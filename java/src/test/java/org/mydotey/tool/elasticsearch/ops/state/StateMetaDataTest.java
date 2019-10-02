@@ -28,10 +28,18 @@ public class StateMetaDataTest {
     public static final String SHARD_STATE_FILE = SHARD_DATA_PATH + "state-3.st";
     public static final String RETENTION_LEASES_STATE_FILE = SHARD_DATA_PATH + "retention-leases-3.st";
 
+    public static final String DATA_INDEX_DELETED_PATH =
+        "/home/koqizhao/Projects/mydotey/elasticsearch/elasticsearch-ops/data/es-data-index-deleted/";
+    public static final String CLUSTAR_STATE_INDEX_DELETED_FILE = DATA_INDEX_DELETED_PATH + "nodes/0/_state/" + "global-6.st";
+
     @Test
     public void loadAndPrint() throws IOException {
         StateMetaData<MetaData> clusterMetaData =
             StateMetaData.newClusterMetaData(CLUSTAR_STATE_FILE);
+        print(clusterMetaData);
+
+        clusterMetaData =
+            StateMetaData.newClusterMetaData(CLUSTAR_STATE_INDEX_DELETED_FILE);
         print(clusterMetaData);
 
         StateMetaData<NodeMetaData> nodeMetaData =

@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import org.apache.lucene.codecs.CodecUtil;
 import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.OutputStreamIndexOutput;
+import org.elasticsearch.cluster.ClusterModule;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.Manifest;
 import org.elasticsearch.cluster.metadata.MetaData;
@@ -37,11 +38,19 @@ public class StateMetaData<T> {
     public static final int MIN_COMPATIBLE_STATE_FILE_VERSION = 1;
     public static final int STATE_FILE_VERSION = 1;
 
+    public static final NamedXContentRegistry CLUSTER_REGISTRY = new NamedXContentRegistry(
+        ClusterModule.getNamedXWriteables());
+
     private MetaDataStateFormat<T> _format;
     private T _metaData;
 
     public StateMetaData(MetaDataStateFormat<T> format, String file) throws IOException {
         this(format, format.read(NamedXContentRegistry.EMPTY, Paths.get(file)));
+    }
+
+    public StateMetaData(MetaDataStateFormat<T> format, NamedXContentRegistry namedXContentRegistry,
+        String file) throws IOException {
+        this(format, format.read(namedXContentRegistry, Paths.get(file)));
     }
 
     public StateMetaData(MetaDataStateFormat<T> format, T metaData) throws IOException {
@@ -80,7 +89,7 @@ public class StateMetaData<T> {
     }
 
     public static StateMetaData<MetaData> newClusterMetaData(String metadataFile) throws IOException {
-        return new StateMetaData<MetaData>(MetaData.FORMAT, metadataFile);
+        return new StateMetaData<MetaData>(MetaData.FORMAT, CLUSTER_REGISTRY, metadataFile);
     }
 
     public static StateMetaData<MetaData> newClusterMetaData(MetaData metadata) throws IOException {
